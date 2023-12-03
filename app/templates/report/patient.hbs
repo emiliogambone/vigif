@@ -1,0 +1,50 @@
+<div class="bar bar-standard bar-header-secondary">
+    {{submit-button "right" this "reaction" model.reports identifyError=(action 'identifyError')}}
+    <h4 class="title text-center">Paziente</h4>
+</div>
+
+<div class="content content-padded">
+    <div class="extra-padding">
+        <div id="patient-error" class="error">
+            <b>Attenzione:</b> tutti i campi sono obbligatori.
+        </div>
+
+        <form {{action "setElement" 'patient_sex' this on="change"}}>
+            {{radio-button-group model.reports.patient_sex "patient_sex" model.reports.patient_sex_list}}
+        </form>
+
+
+        <hr id="patient-hr">
+
+        <!--form {{action "setElement" 'patient_age_group' this on="change"}}>
+            {{radio-button-group model.reports.patient_age_group "patient_age_group" model.reports.patient_age_group_list }}
+        </form-->
+
+        <form {{action "setSliderElement" 'patient_age' this on="input"}}>
+          <p>Trascina per modificare l'età</p>
+            <input type="range" min="0" max="150" value=model.reports.patient_age class="slider" name="patient_age">
+        </form>
+
+        <form {{action "setElement" 'patient_age_uom' this on="change"}}>
+            {{eta-button-group model.reports.patient_age_uom model.reports.patient_age_uom_list}}
+        </form>
+
+        <hr id="patient-hr">
+
+        <form>
+          <label class="col-eta">
+            <form {{action "setElement" 'patient_age' this on="change"}}>
+              {{input type="number" id='text_age' value=model.reports.patient_age class="eta-text" max="150" min="0"}}
+            </form>
+          </label><label class="col-4">
+            {{input type="text" id='text_age_uom' value=model.reports.patient_age_uom disabled="disabled" class="stable-string"}}
+          </label><label class="col-group">
+            {{input type="text" id='text_age_group' value=model.reports.patient_age_group disabled="disabled" class="not-enabled"}}
+          </label>
+
+        </form>
+
+
+        {{submit-button "bottom" this "reaction" model.reports identifyError=(action 'identifyError')}}
+    </div>
+</div>

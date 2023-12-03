@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: adapters/report.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: adapters/report.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import DS from 'ember-data';
+import Ember from 'ember';
+import RSVP from 'rsvp';
+import {apikey_write, url_write} from './apikey';
+const { Promise } = RSVP;
+/**
+  *Adapter dei report
+  *
+  *Adapter che si occupa dell'invio dei dati relativi al report al server
+  *@augments DS/Adapter
+  */
+export default DS.Adapter.extend({
+
+  defaultSerializer: 'report',
+
+  /**
+    funzione per recuperare tutti i record di tipo "report" dallo store
+    @function
+    @override
+    @return {Promise}
+  */
+  findAll(store){
+    return new Ember.RSVP.Promise(function(resolve) {
+      let report = store.peekAll('report');
+      resolve(report);
+    })
+  },
+
+  /**
+    metodo per inviare il record al server, viene chiamato dal metodo save() e richiama il serializer
+    @function
+    @override
+    @return {Promise}
+  */
+  createRecord(store, type, snapshot){
+    var report = this.get('store').peekAll('report');
+    var modello = report.toArray()[0];
+    if(modello == undefined || modello.get('step') == 1){
+      let ls = store.peekAll('localstorage').toArray()[0];
+      return ls.save();
+    }else if(modello.get('step') != 6){
+      let ls = store.peekAll('localstorage').toArray()[0];
+      return ls.save();
+    }else{
+      let data = this.serialize(snapshot);
+      return new Promise(function(resolve, reject){
+        let xhr = new XMLHttpRequest();
+        var method = 'POST';
+        var url = url_write + "submit";
+
+        if ("withCredentials" in xhr) {
+        // XHR for Chrome/Firefox/Opera/Safari.
+          xhr.open(method, url, true);
+        } else if (typeof XDomainRequest != "undefined") {
+          // XDomainRequest for IE.
+          xhr = new XDomainRequest();
+          xhr.open(method, url);
+        } else {
+          // CORS not supported.
+          xhr = null;
+        }
+
+        if (!xhr) {
+          alert('CORS not supported');
+          return;
+        }
+
+        // a ogni cambiamento di stato viene chiamata la funzione alertContents()
+        xhr.onreadystatechange = alertContents;
+        xhr.setRequestHeader("Vigifarmaco-Api-Key", apikey_write);
+        xhr.setRequestHeader("Content-type" , "text/xml");
+        xhr.send(data);
+
+        /*
+           funzione che risolve la promessa con la risposta in XML se lo stato è 200
+           altrimenti la rigetta con l'errore inviato dal server
+        */
+        function alertContents() {
+          if (this.readyState == 4){
+            if(this.status == 200){
+                resolve(this.response);
+              }
+
+            else{
+              reject(xhr.responseXML.getElementsByTagName('errors')[0].children[0].firstChild.nodeValue);
+            }
+          }
+        }
+     });
+   }
+  }
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#action:deleteRoute">action:deleteRoute</a></li><li><a href="global.html#action:identifyError">action:identifyError</a></li><li><a href="global.html#action:operRoute">action:operRoute</a></li><li><a href="global.html#action:order">action:order</a></li><li><a href="global.html#actions">actions</a></li><li><a href="global.html#actions:add">actions:add</a></li><li><a href="global.html#actions:check">actions:check</a></li><li><a href="global.html#actions:getLocation">actions:getLocation</a></li><li><a href="global.html#actions:seriousStatus">actions:seriousStatus</a></li><li><a href="global.html#actions:setDate">actions:setDate</a></li><li><a href="global.html#actions:setElement">actions:setElement</a></li><li><a href="global.html#actions:setLocation">actions:setLocation</a></li><li><a href="global.html#actions:setSliderElement">actions:setSliderElement</a></li><li><a href="global.html#actions:submit">actions:submit</a></li><li><a href="global.html#classe">classe</a></li><li><a href="global.html#createRecord">createRecord</a></li><li><a href="global.html#customOrder">customOrder</a></li><li><a href="global.html#destination">destination</a></li><li><a href="global.html#etaButtonGroup">etaButtonGroup</a></li><li><a href="global.html#findAll">findAll</a></li><li><a href="global.html#fullRole">fullRole</a></li><li><a href="global.html#getRegion">getRegion</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#idtoname">idtoname</a></li><li><a href="global.html#left_icon">left_icon</a></li><li><a href="global.html#model">model</a></li><li><a href="global.html#mywindow">mywindow</a></li><li><a href="global.html#normalizeResponse">normalizeResponse</a></li><li><a href="global.html#orderedTreatments">orderedTreatments</a></li><li><a href="global.html#orderName">orderName</a></li><li><a href="global.html#queryParams">queryParams</a></li><li><a href="global.html#radioButtonGroup">radioButtonGroup</a></li><li><a href="global.html#right_icon">right_icon</a></li><li><a href="global.html#selectGroup">selectGroup</a></li><li><a href="global.html#selectStructure">selectStructure</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#setAgeGroup">setAgeGroup</a></li><li><a href="global.html#sortProperties">sortProperties</a></li><li><a href="global.html#SubmitButtonComponent">SubmitButtonComponent</a></li><li><a href="global.html#text">text</a></li><li><a href="global.html#undo">undo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 15 2017 09:13:34 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

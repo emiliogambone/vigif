@@ -1,0 +1,5 @@
+= VigiFarmaco-Mobile
+
+== Panoramica
+
+VigiFarmaco-Mobile è un'applicazione per l'invio di segnalazioni avverse da farmaci e vaccini *ottimizzata per dispositivi mobili*, che invia il dato raccolto a VigiFarmaco (https://www.vigifarmaco.it) attraverso le sue API.

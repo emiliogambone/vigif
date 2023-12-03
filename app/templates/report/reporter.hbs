@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="bar bar-standard bar-header-secondary">
+    {{#link-to 'report.all-treatments' class="btn btn-link btn-nav pull-left"}}
+        <span class="icon icon-left-nav"></span>
+        Indietro
+    {{/link-to}}
+    {{submit-button "right" this "finalCheck" model.reports identifyError=(action 'identifyError')}}
+    <h4 class="title text-center">Segnalatore</h4>
+</div>
+
+<div class="content content-padded">
+    <div class="extra-padding">
+
+        <div id="reporter-error" class="error">
+        </div>
+
+        <form id="reporter">
+            {{input id='reporter_name' name='reporter_name' class="form-control" value=model.reports.reporter_name placeholder='Nome'}}
+            {{input id='reporter_surname' name='reporter_surname' class="form-control" value=model.reports.reporter_surname placeholder='Cognome'}}
+            {{input id='reporter_email' type="email" name='reporter_email' class="form-control" value=model.reports.reporter_email placeholder='Email'}}
+            {{input id='reporter_phone_fax' type="tel" class="form-control" value=model.reports.reporter_phone_fax placeholder='Cellulare'}}
+        </form>
+
+        <hr id="reporter-hr">
+
+        <form>
+          <form {{action "setElement" 'region_id' this on="change"}} class="col-10">
+              {{select-group model.reports.region_id "region_id" model.regions "Selezionare la propria regione"}}
+          </form>
+
+          <button class="btn geobutton btn-primary col-2" {{action "getLocation" on="click"}}><i class="fa fa-map-marker fa-3x" aria-hidden="true"></i></button>
+        </form>
+
+
+        <form {{action "setElement" 'healthcare_structure_id' this on="change"}} >
+          {{select-structure model.reports.healthcare_structure_id model.healthcare_structures model.reports.region_id}}
+        </form>
+
+        {{submit-button "bottom" this "finalCheck" model.reports identifyError=(action 'identifyError')}}
+
+    </div>
+</div>

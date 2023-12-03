@@ -1,0 +1,52 @@
+<div class="bar bar-standard bar-header-secondary">
+    {{#link-to 'report.reaction' class="btn btn-link btn-nav pull-left"}}
+        <span class="icon icon-left-nav"></span>
+        Indietro
+    {{/link-to}}
+    {{#if model.reports.treatments}}
+        {{submit-button "right" this "reporter" model.reports identifyError=(action 'identifyError')}}
+    {{/if}}
+    <h4 class="title text-center">Farmaci</h4>
+</div>
+
+<div class="content content-padded">
+    <div class="extra-padding">
+
+        {{#unless model.reports.treatments}}
+            <div class="warning">Inserire almeno un farmaco.</div>
+        {{/unless}}
+
+        {{#if model.reports.treatments}}
+            <ul class="table-view">
+                <li class="table-view-cell table-view-divider">Premere su un Farmaco per modificarlo
+                </li>
+                {{#each orderedTreatments as |trt|}}
+                    <li class="table-view-cell">
+                        <a class="navigate-right" {{action "openRoute" trt.id on="click"}}>
+                            {{trt.name}}
+                            <p>
+                              {{full-role trt.role}}
+                              {{#if trt.start_date}}
+                              <br>
+                              {{moment-format trt.start_date "DD/MM/YYYY"}}
+                              {{/if}}
+
+                            </p>
+                        </a>
+                        <button class="btn btn-negative" {{action "deleteRoute" trt.id on="click"}}>
+                            <span class="icon icon-close"></span>
+                        </button>
+                    </li>
+                {{/each}}
+            </ul>
+        {{/if}}
+
+        <button class="btn btn-block btn-positive" onclick={{action 'add'}}>Aggiungi</button>
+
+        {{#if model.reports.treatments}}
+            {{submit-button "bottom" this "reporter" model.reports identifyError=(action 'identifyError')}}
+        {{/if}}
+
+    </div>
+
+</div>

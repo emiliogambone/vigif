@@ -1,0 +1,32 @@
+<div class="bar bar-standard bar-header-secondary">
+        {{submit-button "left" this "all-treatments" model 'Cancella' 'true'}}
+        {{submit-button "right" this "all-treatments" model "Fatto"}}
+        <h4 class="title text-center">Nuovo Farmaco</h4>
+</div>
+
+<div class="content content-padded">
+    <div class="extra-padding">
+
+        <div id="treatment-error" class="error">
+        </div>
+
+        {{input name='name' value=model.name placeholder='Nome del Farmaco'}}
+
+        <p>Inserire data di inizio del trattamento
+          <form {{action "setDate" on="change"}}>
+            {{input type="date" id="start_date" placeholder="Inserire data di inizio" value=model.start_date}}
+          </form>
+        </p>
+
+        {{!--pikaday-input readonly="readonly" id="start_date" placeholder="Inserire data di inizio" value=model.start_date onSelection=(action 'setDate') format="D/M/YYYY"--}}
+
+        <form name="role" {{action "setElement" 'role' this on="change"}}>
+            {{radio-button-group model.role "role" model.role_list}}
+        </form>
+
+        {{input id="therapeutic_indication" name='therapeutic_indication' value=model.therapeutic_indication placeholder="Motivo d'uso"}}
+        {{submit-button "undo" this "all-treatments" model 'Cancella' 'true'}}
+        {{submit-button "bottom" this "all-treatments" model "Fatto" identifyError=(action 'identifyError')}}
+
+    </div>
+</div>

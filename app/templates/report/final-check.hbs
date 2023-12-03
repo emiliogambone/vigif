@@ -1,0 +1,85 @@
+<div class="bar bar-standard bar-header-secondary">
+
+    {{#link-to 'report.reporter' class="btn btn-link btn-nav pull-left"}}
+        <span class="icon icon-left-nav"></span>
+        Indietro
+    {{/link-to}}
+    <button {{action 'submit' this on="click"}} class="btn btn-link btn-nav pull-right">
+        Invia
+        <span class="icon icon-right-nav"></span>
+    </button>
+    <h4 class="title text-center">Anteprima</h4>
+</div>
+
+<div class="content content-padded">
+    <div class="extra-padding">
+        <div class="actual-content">
+
+            <div id="final-error" class="error">
+            </div>
+
+            <p><strong>Data segnalazione</strong></p>
+            <p>{{moment-format model.data_compilazione "DD/MM/YYYY"}}</p>
+
+            <p><strong>Paziente</strong></p>
+            <p>Età: {{model.reports.patient_age_group}}<br>Sesso: {{model.reports.patient_sex}}</p>
+
+            <p><strong>Reazione</strong></p>
+            <p>
+                {{#if model.reports.adrs_start_date}}
+                  Data: {{moment-format model.reports.adrs_start_date "DD/MM/YYYY"}}<br>
+                {{/if}}
+                Descrizione: {{model.reports.adrs_description}}<br>
+                Gravità:
+                {{#if model.reports.seriousness_criterium_id}}
+                  Grave - <i>{{idtoname model.reports.seriousness_criterium_id model.seriousness}}</i>
+                {{else}}
+                  Non grave
+                {{/if}}<br>
+                {{#if model.reports.outcome_id}}
+                  Esito: {{idtoname model.reports.outcome_id model.outcomes}}
+                {{/if}}
+            </p>
+
+            <p><strong>Segnalatore</strong></p>
+            <p>
+                {{#if model.reports.reporter_name}}
+                  Nome: {{model.reports.reporter_name}}<br>
+                {{/if}}
+                Cognome: {{model.reports.reporter_surname}}<br>
+                Contatti: {{model.reports.reporter_email}} {{model.reporter_phone_fax}}<br>
+                Struttura: {{model.reports.healthcare_structure_id}}
+            </p>
+
+            <p><strong>Farmaci coinvolti</strong></p>
+            <ol>
+                {{#each model.reports.treatments as |tr|}}
+                    <li>
+                        <p>{{tr.name}} <i>{{tr.role}}</i></p>
+                        <ul>
+                            {{#if tr.therapeutic_indication}}
+                            <li>
+                                <p>assunto per: <i>{{tr.therapeutic_indication}}</i></p>
+                            </li>
+                            {{/if}}
+                            {{#if tr.start_date}}
+                            <li>
+                                <p>
+                                  in data: <i>{{moment-format  tr.start_date "DD/MM/YYYY" year="numeric"}}</i>
+                                </p>
+                            </li>
+                            {{/if}}
+                        </ul>
+                    </li>
+                {{/each}}
+            </ol>
+
+            <p><strong>Note del Segnalatore</strong></p>
+
+            {{textarea class="text" id="sender_notes" name='sender_notes' value=model.reports.sender_notes maxlength="2000" rows="5"}}
+
+            <button {{action 'submit' this on="click"}} class="btn btn-block btn-primary">Invia</button>
+        </div>
+
+    </div>
+</div>

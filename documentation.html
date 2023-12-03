@@ -1,0 +1,61 @@
+<head>
+  <meta charset="utf-8">
+  <title>Introduzione</title>
+
+  <script src="docs/scripts/prettify/prettify.js"> </script>
+  <script src="docs/scripts/prettify/lang-css.js"> </script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link type="text/css" rel="stylesheet" href="docs/styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="docs/styles/jsdoc-default.css">
+</head>
+<body>
+  <h1 class="page-title">VigiFarmaco-Mobile</h1>
+  <h2>VigiFarmaco-Mobile in Ember</h2>
+  <p>L'app VigiFarmaco-Mobile utilizza il pattern architetturale MVC (Model-View-Controller).<br>
+  Nel progetto, sono presenti otto categorie di file:
+  <ul>
+    <li><strong>ADAPTERS</strong><br>
+      Gli adapter sono gli elementi che traducono una richiesta di Ember in una richiesta al server</li>
+    <li><strong>COMPONENTS</strong><br>
+      I component associano un file .hbs e un file .js e rappresentano un componente grafico, con funzioni associate (tali funzioni sono descritte nel file .js)</li>
+    <li><strong>CONTROLLERS</strong><br>
+      I controller si comportano come un tipo speciale di component e vengono visualizzati dal router quando si entra in una Route.
+      Nei controller viene inserito il codise JS che va ad interagire direttamente con i template, tali funzioni sono racchiuse nell'oggetto "actions"</li>
+    <li><strong>HELPERS</strong><br>
+      Gli helper generano stringhe HTML (dette HTML safe) richiamabili dai file .hbs. Gli helper generano stringhe e non modificano lo stato dell'app, a differenza dei component. L'utilità degli helper è quella di evitare la ripetizione di codice HTML</li>
+    <li><strong>MODELS</strong><br>
+      In Ember Data, ciascun model è rappresentato da una sottoclasse di Model che definisce gli attributi, le relazioni e il comportamento dei dati. I modelli definiscono il tipo di dati che verranno forniti dal server e al quale l'utente avrà accesso.
+      All'interno dei modelli, oltre alla definizione degli attributi si definiscono anche le proprietà e i vincoli di essi. In VigiFarmaco-Mobile è stato utilizzato l'addon <code>ember-cp-validations</code> per gestire le validazioni dei dati.</li>
+    <li><strong>ROUTES</strong><br>
+      Ogni route è costruita con tre parti:
+    	<ol>
+        <li> Una voce nel router Ember (<u>/app/router.js</u>), che mappa tra il nome della route e un URI specifico </li>
+        <li> Un file gestore di route, che imposta cosa dovrebbe accadere quando viene caricato quel percorso (<u>app/routes/about.js</u>) </li>
+        <li> Un template, che indica dove viene visualizzato il contenuto effettivo della pagina (<u>app/templates/about.hbs</u>)</li>
+      </ol>
+      Il file gestore di route, nel caso di VigiFarmaco-Mobile, carica il modello relativo ai dati che si andranno a gestire in quella route</li>
+    <li><strong>SERIALIZERS</strong><br>
+      I serializer formattano i dati ricevuti ed inviati. In VigiFarmaco-Mobile la maggior parte dei serializer prendono i dati ricevuti dal server e traducono il file XML per popolare i model, ad esclusione del <u>serializer report.js</u> che fa l'opposto, ovvero prende i dati generati da Ember e li traduce in un file XML adatto all'invio al server.</li>
+    <li><strong>TEMPLATES</strong><br>
+      I template sono le view dell'app e, nel caso di Ember, utilizzano l'estensione della libreria Moustache: <a href="http://handlebarsjs.com/">Handlebars</a>. </li>
+  </ul>
+  <p>Una delle particolarità di Ember è l'importanza che assume il nome del file, infatti i file con nomi uguali sono automaticamente collegati, eliminando la necessità di importare i file.<br>
+  <i>Esempio 1:</i> la <u>route patient.js</u> recupera il modello dei dati e carica il <u>template patient.hbs</u> a video, l'utente interagisce con il <u>controller patient.js</u> direttamente dalla view.<br>
+  <i>Esempio 2:</i> per avere gli esiti di una reazione, si produce una richiesta al server attraverso l'<u>adapter outcome.js</u>, il quale, per fornire dei dati utilizzabili dall'app in Ember, usa funzioni inserite nel <u>serializer outcome.js</u>. Quest'ultimo popolerà direttamente il <u>model outcome.js</u></p>
+
+  <h2>Form multistep</h2>
+  <p>L'app web VigiFarmaco-Mobile è stata implementata come un form multistep, dove, in ogni step, viene proposto all'utente una view adatta a completare una <i>zona</i> del documento, che poi sarà la segnalazione. (<i>Esempio:</i> il primo step permette la compilazione di tutti i campi relativi al paziente)<br>
+  Per gestire il controllo dei dati inseriti, è stato implementato (nel <u>model report.js</u>) un sistema di validazioni che, in base al numero dello step (attributo inserito all'interno del modello) seleziona le condizioni da verificare.<br>
+  <ol><i>
+    <li>Al primo step (dati del paziente) sono attivate le validazioni per il paziente;</li>
+    <li>Al secondo step (dati della reazione avversa) sono attivate le validazioni per la reazione avversa <strong>più tutte le validazioni degli step precedenti</strong> (paziente)</li>
+    <li>E così via...</li>
+  </i></ol>
+  Il valore dell'attributo step all'interno del <u>model report.js</u> è settato nel metodo <code>model()</code> presente in ogni route; tale metodo è richiamato al caricamento del template, quando si rende necessario caricare/identifiare il modello dati su cui si sta lavorando.</p>
+  <p>Per creare il form multistep, è stato necessario creare una route <i>contenitore</i> (nel caso di VigiFarmaco-Mobile, la <u>route report.js</u>) che permettesse di avere un punto di riferimento per il modello dati. Creando la <u>route report.js</u>, si è potuto utilizzare il metodo <code>modelFor()</code> per recuperare il <u>model report.js</u>.</p>
+
+  <h2>Documentazione</h2>
+  <a href="./docs/index.html">JSDoc</u>
+</body>

@@ -1,0 +1,62 @@
+
+
+<div class="bar bar-standard bar-header-secondary">
+    {{#link-to 'report.patient' class="btn btn-link btn-nav pull-left"}}
+        <span class="icon icon-left-nav"></span>
+        Indietro
+    {{/link-to}}
+    {{submit-button "right" this "all-treatments" model.reports identifyError=(action 'identifyError')}}
+    <h4 class="title text-center">Reazione</h4>
+</div>
+
+<div class="content content-padded">
+    <div class="extra-padding">
+        <div id="reaction-error" class="error">
+        </div>
+
+        <form id="adrs">
+            {{textarea form="adrs" class="text" id="adrs_description" name='adrs_description' value=model.reports.adrs_description placeholder='(*) Descrizione della reazione avversa' rows="4"}}
+
+            <p>Data di insorgenza
+              <form {{action "setDate" on="change"}}>
+                {{input type="date" id="adrs_start_date" class="test form-control" placeholder='Data di insorgenza' value=model.reports.adrs_start_date}}
+              </form>
+            </p>
+            {{!--pikaday-input readonly="readonly" id="adrs_start_date" class="test form-control" placeholder="Data di insorgenza" value=model.reports.adrs_start_date onSelection=(action 'setDate') format="D/M/YYYY"--}}
+        </form>
+        <hr id="reaction-hr">
+        {{#if model.reports.serious}}
+            <form id="serious">
+                <label class="col-xs-12 col-6 radio left">
+                    <input type="radio" name="serious" onclick={{action 'seriousStatus' true}} checked="checked"> Grave
+                </label>
+                <label class="col-xs-12 col-6 radio right">
+                    <input type="radio" name="serious" onclick={{action 'seriousStatus' false}}> Non Grave
+                </label>
+            </form>
+
+            <form {{action "setElement" 'seriousness_criterium_id' this on="change"}}>
+                {{select-group model.reports.seriousness_criterium_id "seriousness_criterium_id" model.seriousness "(*) Criterio di gravità della reazione" model.reports.serious}}
+            </form>
+        {{else}}
+            <form id="serious">
+                <label class="col-xs-12 col-6 radio left">
+                    <input type="radio" name="serious" onclick={{action 'seriousStatus' true}}> Grave
+                </label>
+                <label class="col-xs-12 col-6 radio right">
+                    <input type="radio" name="serious" onclick={{action 'seriousStatus' false}} checked="checked"> Non Grave
+                </label>
+            </form>
+
+            <form {{action "setElement" 'seriousness_criterium_id' this on="change"}}>
+                {{select-group model.reports.seriousness_criterium_id "seriousness_criterium_id" model.seriousness "Criterio di gravità della reazione" model.reports.serious}}
+            </form>
+        {{/if}}
+
+        <form {{action "setElement" 'outcome_id' this on="change"}}>
+            {{select-group model.reports.outcome_id "outcome_id" model.outcomes "Esito della reazione"}}
+        </form>
+
+        {{submit-button "bottom" this "all-treatments" model.reports identifyError=(action 'identifyError')}}
+    </div>
+</div>

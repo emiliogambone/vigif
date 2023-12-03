@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/report/all-treatments.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/report/all-treatments.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Ember from 'ember';
+const {
+  get,
+  set,
+  computed,
+  Controller
+} = Ember;
+const { sort } = computed;
+
+/**
+  *Controller associato alla route e al template "all-treatments"
+  *
+  *Controller che gestisce le action dello step "all-treatments"
+  *@augments Ember/Controller
+  */
+export default Controller.extend({
+
+  // -------------------------------------------------------------------------
+  // Attributes
+
+  /**@type{Array.&lt;String>} attributo necessario per aprire la rute del treatment corrispondente*/
+  queryParams: ['id'],
+  /**@type{String} id effettivo, settato in base al treatment selezionato*/
+  id: null,
+  /**@type{Array.&lt;String>} proprietà di ordinamento (ordinamento ascendente secondo il nome)*/
+  sortProperties: ['name:asc'],
+  /**@type{Array.&lt;Object>} array ordinato secondo il criterio sortProperties*/
+  orderedTreatments:  sort('model.reports.treatments', 'sortProperties'),
+  /**@type{Boolean} flag che indentifica se siamo nell'ordinamento di default(false) o in uno personalizzato(true)*/
+  customOrder: false,
+  /**@type{String} tipo di ordinamento*/
+  orderName: undefined,
+
+  // -------------------------------------------------------------------------
+  // Actions
+
+  /** @type {Object} */
+  actions:{
+    /**
+      *creazione di un nuovo treatment
+      *@function actions:add
+      */
+    add(){
+      /*
+      crea un timestamp
+      */
+      let temp = Math.floor(Date.now() / 10000);
+
+      /*
+      creazione di un nuovo record per un nuovo treatment
+      */
+      this.get('store').createRecord('treatment',{
+        report: this.get('model').reports,
+        id: temp
+      });
+
+      this.transitionToRoute('report.treatment', { queryParams: { id: temp }});
+    },
+
+    /**
+      *apertura della route specifica associata al farmaco, per la modifica
+      *
+      *@function action:operRoute
+      *@argument value
+      */
+    openRoute(value){
+      this.transitionToRoute('report.treatment', { queryParams: { id: value }});
+    },
+    /**
+      *eliminazione di un treatment esistente.
+      *N.B. il treatment rimarrà in cache fino al passaggio ad una nuova route
+      *
+      *@function action:deleteRoute
+      *@argument value
+      */
+    deleteRoute(value){
+      let model = this.get('model').reports;
+      let treatments = get(model, 'treatments').toArray();
+      for(let i = 0; i &lt; treatments.length; i++){
+        if(treatments[i].get('id') == value){
+          treatments[i].destroyRecord();
+        }
+      }
+    },
+    /**
+      *Azione che al click ordina i treatments in base alla colonna selezionata
+      *1 click = ascendente
+      *2 click = descendente
+      *3 click = ritorno allo std
+      *@function action:order
+      *@argument field
+      */
+    order(field){
+      //memorizza il valore di customOrder
+      let co = get(this, 'customOrder');
+      let type;
+      //riprende l'oggetto
+      let element = document.getElementById(field);
+      if(get(this, 'orderName') == field){ //se l'oggetto non al primo click
+        if(get(this, 'customOrder') == true){  //se l'oggetto è al secondo click
+          type = ":desc";
+          set(this, 'customOrder',false); //si prepara per il terzo click
+          element.innerHtml = element.getAttribute('name') +"D";
+        }else{  //se l'oggetto è al terzo click
+          set(this, 'orderName', undefined); //torna allo stato iniziale
+        }
+      }else{ //se l'oggetto è al primo click
+        type = ":asc";
+        set(this, 'orderName', field);
+        co = true;
+        set(this, 'customOrder', true);
+        element.innerHtml = element.getAttribute('name') +"A";
+      }
+      let sP = co ? [field+type] : ['role:desc', 'start_date:asc'];
+      if(!co){
+        element.innerHtml = element.getAttribute('name');
+      }
+      //cambia i parametri di ordinamento
+      set(this, 'sortProperties', sP);
+    },
+    /**
+      *Funzione di identificazione del campo che genera un errore nelle validazioni del model
+      *@function action:identifyError
+      *@argument name
+      */
+    identifyError(name){
+      let element = document.getElementById(name);
+      element.classList.add("hasError");
+    }
+  }
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#action:deleteRoute">action:deleteRoute</a></li><li><a href="global.html#action:identifyError">action:identifyError</a></li><li><a href="global.html#action:operRoute">action:operRoute</a></li><li><a href="global.html#action:order">action:order</a></li><li><a href="global.html#actions">actions</a></li><li><a href="global.html#actions:add">actions:add</a></li><li><a href="global.html#actions:check">actions:check</a></li><li><a href="global.html#actions:getLocation">actions:getLocation</a></li><li><a href="global.html#actions:seriousStatus">actions:seriousStatus</a></li><li><a href="global.html#actions:setDate">actions:setDate</a></li><li><a href="global.html#actions:setElement">actions:setElement</a></li><li><a href="global.html#actions:setLocation">actions:setLocation</a></li><li><a href="global.html#actions:setSliderElement">actions:setSliderElement</a></li><li><a href="global.html#actions:submit">actions:submit</a></li><li><a href="global.html#classe">classe</a></li><li><a href="global.html#createRecord">createRecord</a></li><li><a href="global.html#customOrder">customOrder</a></li><li><a href="global.html#destination">destination</a></li><li><a href="global.html#etaButtonGroup">etaButtonGroup</a></li><li><a href="global.html#findAll">findAll</a></li><li><a href="global.html#fullRole">fullRole</a></li><li><a href="global.html#getRegion">getRegion</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#idtoname">idtoname</a></li><li><a href="global.html#left_icon">left_icon</a></li><li><a href="global.html#model">model</a></li><li><a href="global.html#mywindow">mywindow</a></li><li><a href="global.html#normalizeResponse">normalizeResponse</a></li><li><a href="global.html#orderedTreatments">orderedTreatments</a></li><li><a href="global.html#orderName">orderName</a></li><li><a href="global.html#queryParams">queryParams</a></li><li><a href="global.html#radioButtonGroup">radioButtonGroup</a></li><li><a href="global.html#right_icon">right_icon</a></li><li><a href="global.html#selectGroup">selectGroup</a></li><li><a href="global.html#selectStructure">selectStructure</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#setAgeGroup">setAgeGroup</a></li><li><a href="global.html#sortProperties">sortProperties</a></li><li><a href="global.html#SubmitButtonComponent">SubmitButtonComponent</a></li><li><a href="global.html#text">text</a></li><li><a href="global.html#undo">undo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 15 2017 09:13:34 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

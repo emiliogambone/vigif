@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: routes/report.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: routes/report.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Ember from 'ember';
+
+const { get, Route } = Ember;
+
+export default Route.extend({
+  /**
+  ritorna il model relativo al record salvato in memoria, se non presente ne crea uno nuovo
+  */
+  model(){
+    var store = get(this, 'store');
+    var temp = undefined;
+
+    /* per ogni report in memoria controllo se le è stato eliminato (cioe gia inviato al server)
+      se tutti i report presenti sono stati eliminati ne creo uno nuovo altrimenti verra usato quello non eliminato
+    */
+    /*records.forEach(function(item){
+      state = records.objectAt(records.indexOf(item)).get('isDeleted');
+      if (state == false){
+        temp = records.objectAt(records.indexOf(item));
+      }
+    });*/
+
+
+    /*
+      Se esiste un record salvato in locale lo recupera
+    */
+    let name;
+    if(temp == undefined){
+      temp = store.createRecord('report');
+      for(name in (this.storage.get("report"))){
+        let value = eval("this.storage.get(\"report\")." + name);
+        if(value === undefined){
+          temp.set(name, undefined);
+        }else if(value === null){
+          temp.set(name, null);
+        /*}else if(/^([0-9]{4})$/.test(value); ){
+          temp.set(name, new Date(value));*/
+        }else if(value == "false"){
+          temp.set(name, false);
+        }else{
+          temp.set(name, value.toString());
+        }
+      }
+      if(this.storage.get("treatments")){
+        if(this.storage.get("treatments").get("length") > 0){
+          temp.set("hasSavedTreatment",true);
+        }else{
+          temp.set("hasSavedTreatment",false);
+        }
+      }
+    }
+
+      /*
+        ritorna una promessa di promesse che verra risolta quando tutte le promesse interne verrano risolte
+        Tranne reports tutti gli altri campi fanno una chiamata GET al server
+      */
+    return Ember.RSVP.hash({
+      reports: temp == undefined ? store.createRecord('report') : temp,
+      outcomes: store.peekAll('outcome').get('length') == 0 ? store.findAll('outcome') : store.peekAll('outcome'),
+      seriousness: store.peekAll('seriousness').get('length') == 0 ? store.findAll('seriousness') : store.peekAll('seriousness'),
+      regions: store.peekAll('region').get('length') == 0 ? store.findAll('region') : store.peekAll('region'),
+      healthcare_structures: store.peekAll('structure').get('length') == 0 ? store.findAll('structure') : store.peekAll('structure')
+    })/*.then(function(){
+
+    temp = reports;
+
+    let i=0;
+    let treat = (this.storage.get("treatments"));
+
+    console.log(treat);
+    console.log("Secondo");
+    console.log(temp);
+
+    for(i=0; i&lt;treat.length; i++){
+      let tmstp = Math.floor(Date.now() / 10000);
+      let trt;
+      trt = this.get('store').createRecord('treatment',{
+        report: temp,
+        id: tmstp
+      });
+
+      var treatments = temp.get('treatments').toArray();
+      for(let i = 0; i &lt; treatments.length; i++){
+        if(treatments[i].get('id') == tmstp){
+          trt = treatments[i];
+        }
+      }
+      console.log(trt.get("aic_code"));
+      for(name in treat[i]){
+        trt.set(name,eval("treat[i]." + name));
+      }
+    }
+  });
+    return rsvp;*/
+  }
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#action:deleteRoute">action:deleteRoute</a></li><li><a href="global.html#action:identifyError">action:identifyError</a></li><li><a href="global.html#action:operRoute">action:operRoute</a></li><li><a href="global.html#action:order">action:order</a></li><li><a href="global.html#actions">actions</a></li><li><a href="global.html#actions:add">actions:add</a></li><li><a href="global.html#actions:check">actions:check</a></li><li><a href="global.html#actions:getLocation">actions:getLocation</a></li><li><a href="global.html#actions:seriousStatus">actions:seriousStatus</a></li><li><a href="global.html#actions:setDate">actions:setDate</a></li><li><a href="global.html#actions:setElement">actions:setElement</a></li><li><a href="global.html#actions:setLocation">actions:setLocation</a></li><li><a href="global.html#actions:setSliderElement">actions:setSliderElement</a></li><li><a href="global.html#actions:submit">actions:submit</a></li><li><a href="global.html#classe">classe</a></li><li><a href="global.html#createRecord">createRecord</a></li><li><a href="global.html#customOrder">customOrder</a></li><li><a href="global.html#destination">destination</a></li><li><a href="global.html#etaButtonGroup">etaButtonGroup</a></li><li><a href="global.html#findAll">findAll</a></li><li><a href="global.html#fullRole">fullRole</a></li><li><a href="global.html#getRegion">getRegion</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#idtoname">idtoname</a></li><li><a href="global.html#left_icon">left_icon</a></li><li><a href="global.html#model">model</a></li><li><a href="global.html#mywindow">mywindow</a></li><li><a href="global.html#orderedTreatments">orderedTreatments</a></li><li><a href="global.html#orderName">orderName</a></li><li><a href="global.html#queryParams">queryParams</a></li><li><a href="global.html#radioButtonGroup">radioButtonGroup</a></li><li><a href="global.html#redirect">redirect</a></li><li><a href="global.html#right_icon">right_icon</a></li><li><a href="global.html#selectGroup">selectGroup</a></li><li><a href="global.html#selectStructure">selectStructure</a></li><li><a href="global.html#setAgeGroup">setAgeGroup</a></li><li><a href="global.html#sortProperties">sortProperties</a></li><li><a href="global.html#SubmitButtonComponent">SubmitButtonComponent</a></li><li><a href="global.html#text">text</a></li><li><a href="global.html#undo">undo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Dec 14 2017 11:38:17 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

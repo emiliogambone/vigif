@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/report/patient.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/report/patient.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Ember from 'ember';
+
+const {
+  Controller
+} = Ember;
+/**
+  *funzione che setta il campo patient_age_group, in base ai campi patient_age e patient_age_uom
+  *@function setAgeGroup
+  *@augments model
+  */
+function setAgeGroup(model){
+  let uom = model.reports.get('patient_age_uom');
+  let age = model.reports.get('patient_age');
+  if(!uom || !age){
+    model.reports.set('patient_age_group', undefined);
+  }else if((uom == "Giorni" &amp;&amp; age &lt;= 31) || (uom == "Mesi" &amp;&amp; age &lt;= 1) || (uom == "Anni" &amp;&amp; age &lt;= 0)) {
+    model.reports.set('patient_age_group', "Neonato");
+  } else if((uom == "Giorni") || (uom == "Mesi" &amp;&amp; age &lt;= 24) || (uom == "Anni" &amp;&amp; age &lt;= 2)) {
+    model.reports.set('patient_age_group', "Infante");
+  } else if((uom == "Mesi" &amp;&amp; age &lt;= 132) || (uom == "Anni" &amp;&amp; age &lt;= 11)) {
+    model.reports.set('patient_age_group', "Bambino");
+  }else if((uom == "Mesi") || (uom == "Anni" &amp;&amp; age &lt;= 18)) {
+    model.reports.set('patient_age_group', "Adolescente");
+  } else if(uom == "Anni" &amp;&amp; age &lt;= 64){
+    model.reports.set('patient_age_group', "Adulto");
+  } else if(uom == "Anni") {
+    model.reports.set('patient_age_group', "Anziano");
+  } else {
+    model.reports.set('patient_age_group', undefined);
+  }
+}
+
+/**
+  *Controller associato alla route e al template "patient"
+  *
+  *Controller che gestisce le action dello step "patient"
+  *@argument Ember/Controller
+  */
+export default Controller.extend({
+  // -------------------------------------------------------------------------
+  // Actions
+
+  /** @type {Object} */
+  actions:{
+    /**
+      *azione che setta l'elemento corrispondente al campo selezionato
+      *@function actions:setElement
+      *@argument name
+      */
+    setElement(name){
+      let radios = document.getElementsByName(name);
+
+      if(name == 'patient_age'){
+        radios[0].value = this.get('model').reports.get('patient_age');
+      }else{
+        for(let i = 0; i &lt; radios.length; i++){
+          if(radios[i].checked){
+            this.get('model').reports.set(name, radios[i].value);
+          }
+        }
+      }
+
+      setAgeGroup(this.get('model'));
+    },
+    /**
+      *azione che setta l'elemento corrispondente al campo selezionato dedicato allo slider
+      *@function actions:setSliderElement
+      *@argument name
+      */
+    setSliderElement(name){
+
+      let model = this.get('model');
+      var slider = document.getElementsByName(name);
+      model.reports.set(name, slider[0].value);
+      setAgeGroup(this.get('model'));
+    },
+    /**
+      *Funzione di identificazione del campo che genera un errore nelle validazioni del model
+      *@function action:identifyError
+      *@argument name
+      */
+    identifyError(name){
+      let error = document.getElementById('patient-error');
+      switch(name) {
+          case 'patient_age':
+            error.innerHTML = 'Selezionare l\'età del paziente.';
+            break;
+          case 'patient_age_uom':
+            error.innerHTML = 'Selezionare un\'unità di misura.';
+            break;
+          default:
+            error.innerHTML = name;
+            break;
+      }
+      error.style.display = "block";
+    }
+  }
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#action:deleteRoute">action:deleteRoute</a></li><li><a href="global.html#action:identifyError">action:identifyError</a></li><li><a href="global.html#action:operRoute">action:operRoute</a></li><li><a href="global.html#action:order">action:order</a></li><li><a href="global.html#actions">actions</a></li><li><a href="global.html#actions:add">actions:add</a></li><li><a href="global.html#actions:check">actions:check</a></li><li><a href="global.html#actions:getLocation">actions:getLocation</a></li><li><a href="global.html#actions:seriousStatus">actions:seriousStatus</a></li><li><a href="global.html#actions:setDate">actions:setDate</a></li><li><a href="global.html#actions:setElement">actions:setElement</a></li><li><a href="global.html#actions:setLocation">actions:setLocation</a></li><li><a href="global.html#actions:setSliderElement">actions:setSliderElement</a></li><li><a href="global.html#actions:submit">actions:submit</a></li><li><a href="global.html#classe">classe</a></li><li><a href="global.html#createRecord">createRecord</a></li><li><a href="global.html#customOrder">customOrder</a></li><li><a href="global.html#destination">destination</a></li><li><a href="global.html#etaButtonGroup">etaButtonGroup</a></li><li><a href="global.html#findAll">findAll</a></li><li><a href="global.html#fullRole">fullRole</a></li><li><a href="global.html#getRegion">getRegion</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#idtoname">idtoname</a></li><li><a href="global.html#left_icon">left_icon</a></li><li><a href="global.html#model">model</a></li><li><a href="global.html#mywindow">mywindow</a></li><li><a href="global.html#normalizeResponse">normalizeResponse</a></li><li><a href="global.html#orderedTreatments">orderedTreatments</a></li><li><a href="global.html#orderName">orderName</a></li><li><a href="global.html#queryParams">queryParams</a></li><li><a href="global.html#radioButtonGroup">radioButtonGroup</a></li><li><a href="global.html#right_icon">right_icon</a></li><li><a href="global.html#selectGroup">selectGroup</a></li><li><a href="global.html#selectStructure">selectStructure</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#setAgeGroup">setAgeGroup</a></li><li><a href="global.html#sortProperties">sortProperties</a></li><li><a href="global.html#SubmitButtonComponent">SubmitButtonComponent</a></li><li><a href="global.html#text">text</a></li><li><a href="global.html#undo">undo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 15 2017 09:13:34 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

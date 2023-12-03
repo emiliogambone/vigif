@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/submit-button.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/submit-button.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Ember from 'ember';
+const {
+  get,
+  computed,
+  Component
+} = Ember;
+/**
+  *Component che crea il submit button
+  *
+  *Component, associato ad un template, che crea un button, dedicato al salvataggio e al passaggio da un form al successivo
+  *@augments Ember/Component
+  *@argument posizione {String}
+  *@argument window {Window}
+  *@argument destinazione {String}
+  *@argument model {Object}
+  *@argument text {String} testo del bottone (facoltativo)
+  *@argument undo {String} (facoltativo)
+  */
+const SubmitButtonComponent = Component.extend({
+
+  // -------------------------------------------------------------------------
+  // Attributes
+
+  /**@type{String} indica la classe per il tag div, calcolata in base alla posizione*/
+  classe: computed('params.[]', function(){
+    let cl = get(this, 'params')[0];
+    if(cl == "left")
+        return "btn btn-link btn-nav pull-left";
+    else if(cl == "bottom")
+        return "btn btn-block btn-primary";
+    else if (cl == "right")
+        return "btn btn-link btn-nav pull-right";
+    else {
+        return "btn btn-negative btn-block";
+    }
+  }),
+
+  /**@type{String} indica l'id per il tag div, calcolato in base alla posizione e alla destinazione*/
+  id: computed('params.[]', function(){
+    let type = get(this, 'params')[0];
+    let route = get(this, 'params')[2];
+        if (type == "undo")
+            return "small-btn";
+        else if (route == "reaction" &amp;&amp; type == "bottom")
+            return "submit-patient";
+        else return "";
+  }),
+  /**@type{String} indica la posizione dell'icona in alla posizione (può non essere presente)*/
+  left_icon: computed('params.[]', function(){
+      if(get(this, 'params')[0] == "left")
+        return Ember.String.htmlSafe(`&lt;span class="icon icon-left-nav">&lt;/span>`);
+      else
+        return ``;
+  }),
+  /**@type{String} indica la posizione dell'icona in alla posizione (può non essere presente)*/
+  right_icon: computed('params.[]', function(){
+      if(get(this, 'params')[0] == "right")
+        return Ember.String.htmlSafe(`&lt;span class="icon icon-right-nav">&lt;/span>`);
+  }),
+  /**@type{Window} indica la finestra in cui il bottone si troverà*/
+  mywindow: computed('params.[]', function(){
+    return get(this, 'params')[1];
+  }),
+  /**@type{String} indica la route di destinazione*/
+  destination: computed('params.[]', function(){
+    return get(this, 'params')[2];
+  }),
+  /**@type{model} indica il modello relativo (può essere report o treatment)*/
+  model: computed('params.[]', function(){
+    return get(this, 'params')[3];
+  }),
+  /**@type{String} testo del bottone, se non inserito viene settato come "Avanti"*/
+  text: computed('params.[]', function(){
+    return get(this, 'params')[4] || "Avanti";
+  }),
+  /**@type{String} funzione di eliminazione
+  N.B. Usata solamente nella route treatment
+  */
+  undo: computed('params.[]', function(){
+    return get(this, 'params')[5] || false;
+  }),
+
+  // -------------------------------------------------------------------------
+  // Actions
+
+  /** @type {Object} */
+  actions: {
+    /**
+    * metodo check()
+    *   se undo è true elimina il treatment e torna a all-treatments
+    *   se destination è index elimina il record inviato e torna alla homepage
+    *   altrimenti controlla le validazioni e passa alla route indicata da destination
+    * @function actions:check
+    */
+    check(){
+      if(get(this, 'undo')){
+        get(this,'model').deleteRecord();
+        get(this, 'mywindow').transitionToRoute('report.' + get(this, 'destination'));
+      } else if (get(this, 'destination') == 'index'){
+            var record = get(this, 'model');
+            record.deleteRecord();
+            get(this, 'mywindow').transitionToRoute(get(this, 'destination'));
+          } else{
+              get(this,'model').validate().then(({validations}) => {
+                if(!validations.get('isValid')) {
+                  this.sendAction('identifyError', validations.get('message'));
+                } else {
+                  /**
+                  salvataggio dei dati in locale
+                  */
+                  this.storage.set("report", get(this, "model"));
+                  if(get(this, "model").get("treatments")){
+                    this.storage.set("treatments", get(this, "model").get("treatments").toArray());
+                  }
+                  get(this, 'mywindow').transitionToRoute('report.' + get(this, 'destination'));
+                }
+              });
+            }
+    },
+
+  }
+});
+
+/**
+metodo necessario per caricare i parametri di ordinamento
+*/
+SubmitButtonComponent.reopenClass({
+  positionalParams: 'params'
+});
+
+export default SubmitButtonComponent;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#action:deleteRoute">action:deleteRoute</a></li><li><a href="global.html#action:identifyError">action:identifyError</a></li><li><a href="global.html#action:operRoute">action:operRoute</a></li><li><a href="global.html#action:order">action:order</a></li><li><a href="global.html#actions">actions</a></li><li><a href="global.html#actions:add">actions:add</a></li><li><a href="global.html#actions:check">actions:check</a></li><li><a href="global.html#actions:getLocation">actions:getLocation</a></li><li><a href="global.html#actions:seriousStatus">actions:seriousStatus</a></li><li><a href="global.html#actions:setDate">actions:setDate</a></li><li><a href="global.html#actions:setElement">actions:setElement</a></li><li><a href="global.html#actions:setLocation">actions:setLocation</a></li><li><a href="global.html#actions:setSliderElement">actions:setSliderElement</a></li><li><a href="global.html#actions:submit">actions:submit</a></li><li><a href="global.html#classe">classe</a></li><li><a href="global.html#createRecord">createRecord</a></li><li><a href="global.html#customOrder">customOrder</a></li><li><a href="global.html#destination">destination</a></li><li><a href="global.html#etaButtonGroup">etaButtonGroup</a></li><li><a href="global.html#findAll">findAll</a></li><li><a href="global.html#fullRole">fullRole</a></li><li><a href="global.html#getRegion">getRegion</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#idtoname">idtoname</a></li><li><a href="global.html#left_icon">left_icon</a></li><li><a href="global.html#model">model</a></li><li><a href="global.html#mywindow">mywindow</a></li><li><a href="global.html#normalizeResponse">normalizeResponse</a></li><li><a href="global.html#orderedTreatments">orderedTreatments</a></li><li><a href="global.html#orderName">orderName</a></li><li><a href="global.html#queryParams">queryParams</a></li><li><a href="global.html#radioButtonGroup">radioButtonGroup</a></li><li><a href="global.html#right_icon">right_icon</a></li><li><a href="global.html#selectGroup">selectGroup</a></li><li><a href="global.html#selectStructure">selectStructure</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#setAgeGroup">setAgeGroup</a></li><li><a href="global.html#sortProperties">sortProperties</a></li><li><a href="global.html#SubmitButtonComponent">SubmitButtonComponent</a></li><li><a href="global.html#text">text</a></li><li><a href="global.html#undo">undo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 15 2017 09:13:34 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

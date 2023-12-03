@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: helpers/select-structure.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: helpers/select-structure.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Ember from 'ember';
+
+/**
+  *Funzione che crea una stringa HTMLsafe rappresentante i select delle strutture
+  *@argument current_value {String} valore del campo
+  *@argument modello {model} model a cui si fa riferimento
+  *@argument region_id {String} id della regione selezionata
+  *@return {String}
+  */
+export function selectStructure([current_value, modello, region_id]) {
+
+  let model = modello.toArray();
+  var array = new Array();
+  for (var i=0; i&lt;model.length; i++){
+    array.push([model[i].get('id'), model[i].get('name')]);
+  }
+
+  array.sort(sortPerNome);
+
+  /*funzione per ordinare un array multidimensionale*/
+  function sortPerNome(a, b){
+    if(a[1] == b[1]){
+      return 0;
+    }
+    else {
+      return (a[1] &lt; b[1]) ? -1 : 1;
+    }
+  }
+
+  var out = `&lt;select id="healthcare_structure_id"` + ` name="healthcare_structure_id" class="adjust"` + (region_id == "null" ? `disabled`:``) +`>`;
+  let text = `Selezionare un'opzione`;
+
+  out += `&lt;option value="" disabled selected>` + text + `&lt;/option>`;
+
+  if(array){
+    for(var j=0; j&lt;array.length; j++){
+      if(array[j][0].substring(0,3) == region_id){
+        out += `&lt;option value="` + array[j][0].substring(3,6) + `"` + (array[j][0].substring(3,6)==current_value ? ` selected="selected"`: ``) + `>`+ array[j][1] + `&lt;/option>`;
+      }
+    }
+  }
+
+  out += `&lt;/select>`;
+
+  return Ember.String.htmlSafe(out);
+}
+
+/**
+  *Helper dei select delle strutture
+  *@augments Ember/Helper
+  *@argument selectStructure {String}
+  */
+export default Ember.Helper.helper(selectStructure);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#action:deleteRoute">action:deleteRoute</a></li><li><a href="global.html#action:identifyError">action:identifyError</a></li><li><a href="global.html#action:operRoute">action:operRoute</a></li><li><a href="global.html#action:order">action:order</a></li><li><a href="global.html#actions">actions</a></li><li><a href="global.html#actions:add">actions:add</a></li><li><a href="global.html#actions:check">actions:check</a></li><li><a href="global.html#actions:getLocation">actions:getLocation</a></li><li><a href="global.html#actions:seriousStatus">actions:seriousStatus</a></li><li><a href="global.html#actions:setDate">actions:setDate</a></li><li><a href="global.html#actions:setElement">actions:setElement</a></li><li><a href="global.html#actions:setLocation">actions:setLocation</a></li><li><a href="global.html#actions:setSliderElement">actions:setSliderElement</a></li><li><a href="global.html#actions:submit">actions:submit</a></li><li><a href="global.html#classe">classe</a></li><li><a href="global.html#createRecord">createRecord</a></li><li><a href="global.html#customOrder">customOrder</a></li><li><a href="global.html#destination">destination</a></li><li><a href="global.html#etaButtonGroup">etaButtonGroup</a></li><li><a href="global.html#findAll">findAll</a></li><li><a href="global.html#fullRole">fullRole</a></li><li><a href="global.html#getRegion">getRegion</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#idtoname">idtoname</a></li><li><a href="global.html#left_icon">left_icon</a></li><li><a href="global.html#model">model</a></li><li><a href="global.html#mywindow">mywindow</a></li><li><a href="global.html#normalizeResponse">normalizeResponse</a></li><li><a href="global.html#orderedTreatments">orderedTreatments</a></li><li><a href="global.html#orderName">orderName</a></li><li><a href="global.html#queryParams">queryParams</a></li><li><a href="global.html#radioButtonGroup">radioButtonGroup</a></li><li><a href="global.html#right_icon">right_icon</a></li><li><a href="global.html#selectGroup">selectGroup</a></li><li><a href="global.html#selectStructure">selectStructure</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#setAgeGroup">setAgeGroup</a></li><li><a href="global.html#sortProperties">sortProperties</a></li><li><a href="global.html#SubmitButtonComponent">SubmitButtonComponent</a></li><li><a href="global.html#text">text</a></li><li><a href="global.html#undo">undo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 15 2017 09:13:34 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

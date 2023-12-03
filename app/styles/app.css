@@ -1,0 +1,292 @@
+:root {
+  --secondary-color: #13455E;
+  --user-insert-background: #f2f2f2;
+  --description-color: #777;
+  --border-color: #ddd;
+  --error-background: #f2dede;
+  --error-border: #ebccd1;
+  --error-text: #a94442;
+  --warning-text: #8a6d3b;
+  --warning-background: #fcf8e3;
+  --warning-border: #faebcc;
+  --unknown-usage-of-this-color: #088C7F;
+  --disabled-color: #d9d9d9;
+  --white: #fff;
+  --black: #000;
+}
+
+.hasError {
+  background-color: #ff0000;
+}
+.hasWarning {
+  background-color: #ffff00;
+}
+.text-center {
+    text-align: center;
+}
+.col-12 {
+    width: 100%;
+    position: relative;
+    min-height: 1px;
+    float:left;
+}
+.col-xs-12 {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    float: left;
+}
+.xs-description {
+    display: inline-block;
+    margin-top: 0;
+    font-size: 14px;
+    color: var(--description-color);
+}
+@media (min-width: 320px) {
+    .col-10 {
+      position: relative;
+      float: left;
+      min-height: 1px;
+      width: 83%;
+      text-align: left;
+    }
+    .col-8 {
+      position: relative;
+      float: left;
+      min-height: 1px;
+      width: 65%;
+      text-align: left;
+    }
+    .col-6 {
+        position: relative;
+        float: left;
+        min-height: 1px;
+        width: 49%;
+    }
+    .col-4 {
+      position: relative;
+      float: left;
+      min-height: 1px;
+      width: 33%;
+      text-align: left;
+    }
+    .col-2 {
+      position: relative;
+      float: left;
+      min-height: 1px;
+      width: 15%;
+      text-align: left;
+    }
+    .col-eta {
+      position: relative;
+      float: left;
+      min-height: 1px;
+      width: 20%;
+      text-align: right;
+    }
+    .col-group {
+      position: relative;
+      float: left;
+      min-height: 1px;
+      width: 45%;
+      text-align: center;
+    }
+    .left {
+        margin-right: 1%;
+    }
+    .right {
+        margin-left: 1%;
+    }
+    .description {
+        display: block;
+        margin-top: 0;
+        font-size: 14px;
+        color: var(--description-color);
+    }
+}
+input[type="text"].eta-text{
+  -webkit-appearance: none;
+  border-right: 0px;
+  text-align: center;
+  outline: none;
+}
+input[type="text"].not-enabled{
+  -webkit-appearance: none;
+  color: var(--description-color);
+  text-align: center;
+  border: 0px;
+  border-left: 0px;
+  background-color: var(--user-insert-background);
+}
+input[type="text"].stable-string{
+  -webkit-appearance: none;
+  color: var(--disabled-color);
+  text-align: left;
+  /*border: 1px;*/
+  border-left: 0px;
+  margin:0 0 0 -7px;
+  /*background-color: var(--user-insert-background);*/
+}
+textarea.notes{
+   resize: vertical;
+   overflow: auto;
+   position: relative;
+}
+.radio {
+    overflow: auto;
+    vertical-align: middle;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    background-color: var(--white);
+    padding: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+}
+.eta {
+    overflow: auto;
+    vertical-align: middle;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    background-color: var(--white);
+    padding: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+}
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+form {
+    overflow:auto;
+}
+select.adjust {
+    height: 35px;
+    font-size: 14px;
+    background-color: var(--white);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);
+}
+
+.error {
+    padding: 5px;
+    margin-bottom: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: var(--error-text);
+    background-color: var(--error-background);
+    border-color: var(--error-border);
+    text-align: center;
+    display: none;
+}
+.warning {
+    padding: 5px;
+    margin-bottom: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: var(--warning-text);
+    background-color: var(--warning-background);
+    border-color: var(--warning-border);
+    text-align: center;
+}
+img {
+    max-height: 100%;
+    max-width: 100%;
+}
+.text {
+    padding-top: 5px;
+}
+.homepage-desc {
+    text-align: left;
+}
+.homepage-jumbotron {
+    padding: 10px;
+    margin-bottom: 10px;
+    background: var(--unknown-usage-of-this-color);
+    border-radius: 5px;
+    height: auto;
+}
+.homepage-jumbotron h2 {
+    color: var(--white);
+}
+.homepage-jumbotron .btn-block {
+    color: var(--white);
+    background-color: var(--secondary-color);
+    border: none;
+    width: 100%;
+}
+.homepage-jumbotron p {
+    color: var(--white);
+}
+p > strong {
+    color: var(--black);
+}
+select:disabled {
+    background: var(--disabled-color);
+}
+.title {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: var(--description-color);
+}
+.btn-block-small {
+    display: block;
+    height: 35px;
+    width: 100%;
+    padding: 15px 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+.geobutton{
+    display: block;
+    height: 35px;
+    position: center center;
+    color: var(--white);
+    text-align: center;
+}
+.actual-content {
+    height: 100%;
+    width: 100%;
+    background-color: var(--user-insert-background);
+    padding-bottom: 10px;
+}
+.extra-padding {
+    padding: 10px;
+    background-color: var(--user-insert-background);
+}
+#small-btn {
+    height: 35px;
+    padding: 5px 0;
+}
+#seriousness_criterium_id, #submit-patient, #therapeutic_indication {
+    margin-top: 12px;
+}
+#start_date {
+    margin-bottom: 12px;
+}
+#patient-hr {
+    height: 1px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    color: var(--white);
+}
+#reaction-hr {
+    height: 1px;
+    margin-top: 0px;
+    margin-bottom: 12px;
+    color: var(--white);
+}
+#reporter-hr {
+    height: 1px;
+    margin-top: 0px;
+    margin-bottom: 15px;
+    color: var(--white);
+}
+.table-view-cell {
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+}
+
+#testbutton{
+    width: 100%;
+}
